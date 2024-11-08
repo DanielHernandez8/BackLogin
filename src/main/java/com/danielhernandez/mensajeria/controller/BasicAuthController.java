@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.danielhernandez.mensajeria.persistence.entities.Mensaje;
 import com.danielhernandez.mensajeria.persistence.entities.User;
+import com.danielhernandez.mensajeria.persistence.repositories.MensajeRepository;
 import com.danielhernandez.mensajeria.persistence.repositories.UserRepository;
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,10 +19,13 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/mensajes")
+@RequestMapping("/mensajeria")
 public class BasicAuthController {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    MensajeRepository mensajeRepository;
 
     @PostMapping(path = "/login")
     public ResponseEntity <String> basicauth(Principal principal) {
@@ -33,5 +39,10 @@ public class BasicAuthController {
     public List<User> getUser(){
         List<User> users = userRepository.findAll();
         return users;
+    }
+
+    @GetMapping("/{id}")
+    public Mensaje getMensajeById (@PathVariable("id")Integer id){
+        return mensajeRepository.findMensajeById(id);
     }
 }
